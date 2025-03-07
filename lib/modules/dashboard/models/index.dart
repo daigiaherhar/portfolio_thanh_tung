@@ -1,0 +1,1 @@
+export 'tabbar_custom_model.dart';

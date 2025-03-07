@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:portfolio_thanh_tung/global_blocs/language/language_cubit.dart';
 
 import '../../../constants/constants.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
+import '../../../global_blocs/language/language_state.dart';
 import '../../../global_widgets/global_widgets.dart';
+import 'index.dart';
 
 class BannerWidget extends StatelessWidget {
   BannerWidget({
@@ -31,8 +36,12 @@ class BannerWidget extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
+
         Positioned.fill(child: AllImage()),
+        Positioned.fill(child: Container(color: ConstColors.black_1)),
+
         Positioned(
+          left: 0,
           top: height * .2,
           width: width / 2,
           child: TitleAndDescriptionWidget(
@@ -67,64 +76,70 @@ class AllImage extends StatelessWidget {
             height: height,
             width: width,
           ),
-        ),
+        ).animate().fade(duration: 500.ms).moveX(begin: -width * .25, end: 0),
         Expanded(
           child: Column(
             children: [
               Expanded(
-                // flex: 2,
-                child: Container(
-                  // margin: EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(color: ConstColors.white),
-                      left: BorderSide(color: ConstColors.white, width: 2),
-                      right: BorderSide(color: ConstColors.white, width: 2),
+                    // flex: 2,
+                    child: Container(
+                      // margin: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(color: ConstColors.white),
+                          left: BorderSide(color: ConstColors.white, width: 2),
+                          right: BorderSide(color: ConstColors.white, width: 2),
+                        ),
+                      ),
+                      child: Image.asset(
+                        ConstImages.tung_4,
+                        fit: BoxFit.cover,
+                        height: height,
+                        width: width,
+                      ),
                     ),
-                  ),
-                  child: Image.asset(
-                    ConstImages.tung_4,
-                    fit: BoxFit.cover,
-                    height: height,
-                    width: width,
-                  ),
-                ),
-              ),
+                  )
+                  .animate()
+                  .fade() // uses `Animate.defaultDuration`
+                  .scale() // inherits duration from fadeIn
+                  .moveY(delay: 300.ms, duration: 500.ms, begin: -20),
+              // runs after the above w/new duration
               Expanded(
-                // flex: 2,
-                child: Container(
-                  // margin: EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      top: BorderSide(color: ConstColors.white),
-                      left: BorderSide(color: ConstColors.white, width: 2),
-                      right: BorderSide(color: ConstColors.white, width: 2),
+                    // flex: 2,
+                    child: Container(
+                      // margin: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          top: BorderSide(color: ConstColors.white),
+                          left: BorderSide(color: ConstColors.white, width: 2),
+                          right: BorderSide(color: ConstColors.white, width: 2),
+                        ),
+                      ),
+                      child: Image.asset(
+                        ConstImages.tung_3,
+                        fit: BoxFit.cover,
+                        height: height,
+                        width: width,
+                      ),
                     ),
-                  ),
-                  child: Image.asset(
-                    ConstImages.tung_3,
-                    fit: BoxFit.cover,
-                    height: height,
-                    width: width,
-                  ),
-                ),
-              ),
+                  )
+                  .animate()
+                  .fade() // uses `Animate.defaultDuration`
+                  .scale() // inherits duration from fadeIn
+                  .moveY(delay: 300.ms, duration: 500.ms, begin: 20),
+              // runs after the above w/new duration
             ],
           ),
         ),
         Expanded(
-          child: Column(
-            children: [
-              Expanded(
-                child: Image.asset(
-                  ConstImages.tung_2,
-                  fit: BoxFit.cover,
-                  height: height,
-                  width: width,
-                ),
-              ),
-            ],
-          ),
+          child: Expanded(
+            child: Image.asset(
+              ConstImages.tung_2,
+              fit: BoxFit.cover,
+              height: height,
+              width: width,
+            ),
+          ).animate().fade(duration: 500.ms).moveX(begin: width * .25, end: 0),
         ),
       ],
     );
@@ -144,10 +159,11 @@ class TitleAndDescriptionWidget extends StatelessWidget {
     return Container(
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: ConstColors.black_1,
+            // color: ConstColors.black_1,
             borderRadius: BorderRadius.all(Radius.circular(6)),
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                     sTitle ?? "",
@@ -157,7 +173,7 @@ class TitleAndDescriptionWidget extends StatelessWidget {
                       height: 1,
                       letterSpacing: -1,
                     ),
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.left,
                   )
                   .animate(onPlay: (controller) => controller.repeat())
                   .shimmer(duration: 1200.ms, color: ConstColors.orange)
@@ -169,18 +185,18 @@ class TitleAndDescriptionWidget extends StatelessWidget {
                 sDescription ?? "",
                 style: TextStyle(
                   color: ConstColors.black_5,
-                  fontSize: ConstStyles.fontTitle(width),
+                  fontSize: ConstStyles.fontDescription(width),
                   height: 1,
                   letterSpacing: -1,
                 ),
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.left,
               ),
             ],
           ),
         )
         .animate()
-        .scale(delay: 1000.ms, duration: 1000.ms)
-        .moveY(end: 0, begin: -height, delay: 500.ms);
+        .scale(delay: 800.ms, duration: 800.ms)
+        .moveY(end: 0, begin: -height * 0.25, delay: 500.ms);
   }
 }
 
@@ -189,7 +205,22 @@ class LanguageWidget extends StatelessWidget {
 
   final GlobalKey popupLang;
 
+  LanguageStatus swapChangeLang(BuildContext context) {
+    LanguageStatus lang = LanguageStatus.en;
+    FlutterI18n.currentLocale(context)!.languageCode == "en"
+        ? lang = LanguageStatus.vi
+        : lang = LanguageStatus.en;
+    return lang;
+  }
+
+  handleChangeLang(BuildContext context) {
+    if (Navigator.canPop(context)) Navigator.pop(context);
+
+    context.read<LanguageCubit>().changeLanguage(swapChangeLang(context));
+  }
+
   onTapLang(context) {
+    print("onTapLangonTapLangonTapLang");
     RenderBox renderBox =
         popupLang.currentContext!.findRenderObject()! as RenderBox;
     final tapLocationOffset = renderBox.localToGlobal(Offset.zero);
@@ -202,32 +233,30 @@ class LanguageWidget extends StatelessWidget {
           return OverPopupPage(
             showOffset: tapLocationOffset,
             buttonSize: buttonSize,
-            didChooseItem: (color) {
-              // setState(() {
-              //   buttonColor = color;
-              // });
-            },
+
+            widget: LanguageAdapter(
+              onTap: () async => handleChangeLang(context),
+              lang: swapChangeLang(context).name,
+              colorHoverOriginal: Colors.transparent,
+            ),
           );
         },
       ),
     );
   }
 
+  exitHover(context) {
+    Navigator.canPop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return OnHoverColor(
+    return LanguageAdapter(
       key: popupLang,
       onTap: () => onTapLang(context),
-      margin: ConstStyles.padding_5,
-      color: ConstColors.black,
-      colorHover: ConstColors.orange,
-      child: Row(
-        children: [
-          Image.asset(ConstImages.icon_vi,height: 24,width: 24,),
-          ConstStyles.space_w_5,
-          Text("Việt Nam", style: TextStyle(color: Colors.white)),
-        ],
-      ),
+      enterHover: () => onTapLang(context),
+      // exitHover: () => exitHover(context),
+      lang: FlutterI18n.currentLocale(context)!.languageCode,
     );
   }
 }
