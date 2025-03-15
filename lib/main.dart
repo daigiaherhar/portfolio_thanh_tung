@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
@@ -63,6 +65,7 @@ class MyApp extends StatelessWidget {
                 GlobalWidgetsLocalizations.delegate,
                 GlobalCupertinoLocalizations.delegate,
               ],
+              scrollBehavior: MyCustomScrollBehavior(), //
               theme: ThemeData(
                 colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
               ),
@@ -73,4 +76,14 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+// ✅ Fix scroll trên Web (hỗ trợ chuột & trackpad)
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse, // Hỗ trợ chuột
+    PointerDeviceKind.trackpad, // Hỗ trợ trackpad
+  };
 }

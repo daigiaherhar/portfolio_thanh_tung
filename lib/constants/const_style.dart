@@ -21,6 +21,13 @@ class ConstStyles {
   static EdgeInsetsGeometry paddingWebRight(double width) =>
       EdgeInsets.only(right: (width) * .015);
 
+  static EdgeInsetsGeometry paddingWebVertical(double width) =>
+      EdgeInsets.symmetric(vertical: (width) * .015);
+
+  static EdgeInsetsGeometry paddingWebHorizontal(double width) =>
+      EdgeInsets.symmetric(horizontal: (width) * .015);
+
   static double fontTitle(double width) => width * 0.035;
+
   static double fontDescription(double width) => width * 0.02;
 }

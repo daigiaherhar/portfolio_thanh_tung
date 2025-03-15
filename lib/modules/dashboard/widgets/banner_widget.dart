@@ -36,7 +36,6 @@ class BannerWidget extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-
         Positioned.fill(child: AllImage()),
         Positioned.fill(child: Container(color: ConstColors.black_1)),
 
@@ -64,26 +63,29 @@ class AllImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
+    final height = MediaQuery.of(context).size.height * .9;
     final width = MediaQuery.of(context).size.width;
-    return Row(
-      children: [
-        Expanded(
-          // flex: 2,
-          child: Image.asset(
-            ConstImages.tung_1,
-            fit: BoxFit.cover,
-            height: height,
-            width: width,
-          ),
-        ).animate().fade(duration: 500.ms).moveX(begin: -width * .25, end: 0),
-        Expanded(
-          child: Column(
-            children: [
-              Expanded(
-                    // flex: 2,
-                    child: Container(
+    return Container(
+      height: height,
+      width: width,
+      child: Row(
+        children: [
+          Container(
+            width: width * .35,
+            child: Image.asset(
+              ConstImages.tung_1,
+              fit: BoxFit.cover,
+              height: height,
+              width: width,
+            ),
+          ).animate().fade(duration: 500.ms).moveX(begin: -width * .25, end: 0),
+          Container(
+            width: width * .3,
+            child: Column(
+              children: [
+                Container(
                       // margin: EdgeInsets.all(15),
+                      height: height / 2,
                       decoration: BoxDecoration(
                         border: Border(
                           bottom: BorderSide(color: ConstColors.white),
@@ -97,17 +99,16 @@ class AllImage extends StatelessWidget {
                         height: height,
                         width: width,
                       ),
-                    ),
-                  )
-                  .animate()
-                  .fade() // uses `Animate.defaultDuration`
-                  .scale() // inherits duration from fadeIn
-                  .moveY(delay: 300.ms, duration: 500.ms, begin: -20),
-              // runs after the above w/new duration
-              Expanded(
-                    // flex: 2,
-                    child: Container(
+                    )
+                    .animate()
+                    .fade() // uses `Animate.defaultDuration`
+                    .scale() // inherits duration from fadeIn
+                    .moveY(delay: 300.ms, duration: 500.ms, begin: -20),
+
+                // runs after the above w/new duration
+                Container(
                       // margin: EdgeInsets.all(15),
+                      height: height / 2,
                       decoration: BoxDecoration(
                         border: Border(
                           top: BorderSide(color: ConstColors.white),
@@ -121,18 +122,18 @@ class AllImage extends StatelessWidget {
                         height: height,
                         width: width,
                       ),
-                    ),
-                  )
-                  .animate()
-                  .fade() // uses `Animate.defaultDuration`
-                  .scale() // inherits duration from fadeIn
-                  .moveY(delay: 300.ms, duration: 500.ms, begin: 20),
-              // runs after the above w/new duration
-            ],
+                    )
+                    .animate()
+                    .fade() // uses `Animate.defaultDuration`
+                    .scale() // inherits duration from fadeIn
+                    .moveY(delay: 300.ms, duration: 500.ms, begin: 20),
+
+                // runs after the above w/new duration
+              ],
+            ),
           ),
-        ),
-        Expanded(
-          child: Expanded(
+          Container(
+            width: width * .35,
             child: Image.asset(
               ConstImages.tung_2,
               fit: BoxFit.cover,
@@ -140,8 +141,8 @@ class AllImage extends StatelessWidget {
               width: width,
             ),
           ).animate().fade(duration: 500.ms).moveX(begin: width * .25, end: 0),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

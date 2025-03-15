@@ -1,13 +1,30 @@
+import 'package:portfolio_thanh_tung/data/repository/api_service_repository.dart';
+
+import '../models/dashboard_model.dart';
 import '../models/index.dart';
 
-class DashboardState {
-  final List<TabBarCustomModel> listProject;
-  final int indexTab;
+enum DashboardStatus { init, loaded, error }
 
-  DashboardState({this.listProject = const [], this.indexTab = 0});
+class DashboardState {
+  final List<ProjectModel> listProject;
+  final List<ChartSkillModel> listSkill;
+  final DashboardStatus status;
+  final DashboardModel? dashboardModel;
+
+  DashboardState({
+    this.listProject = const [],
+    this.listSkill = const [],
+    this.status = DashboardStatus.init,
+    this.dashboardModel,
+  });
 
   DashboardState init() {
-    return DashboardState(indexTab: 0, listProject: []);
+    return DashboardState(
+      status: DashboardStatus.init,
+      listProject: [],
+      listSkill: [],
+      dashboardModel: DashboardModel(),
+    );
   }
 
   DashboardState clone() {
@@ -15,12 +32,16 @@ class DashboardState {
   }
 
   DashboardState copyWith({
-    int? indexTab,
-    List<TabBarCustomModel>? listProject,
+    DashboardStatus? status,
+    List<ProjectModel>? listProject,
+    List<ChartSkillModel>? listSkill,
+    DashboardModel? dashboardModel,
   }) {
     return DashboardState(
-      indexTab: indexTab ?? this.indexTab,
+      status: status ?? this.status,
       listProject: listProject ?? this.listProject,
+      listSkill: listSkill ?? this.listSkill,
+      dashboardModel: dashboardModel ?? this.dashboardModel,
     );
   }
 }
