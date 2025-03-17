@@ -1,5 +1,6 @@
 import 'package:portfolio_thanh_tung/modules/dashboard/models/chart_skill_model.dart';
 import 'package:portfolio_thanh_tung/modules/dashboard/models/project_model.dart';
+import 'package:portfolio_thanh_tung/modules/dashboard/models/social_model.dart';
 
 import '../../constants/constants.dart';
 import '../adapter/repository_adapter.dart';
@@ -33,17 +34,7 @@ class ApiServiceRepository extends RestAPIClient implements RepositoryAdapter {
   }
 
   @override
-  Future<String> test() async {
-    var response = await get("list_skill.json");
-
-    // read()
-    // response.statusCode == "200"
-    return response;
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<ProjectModel>> getProject()async {
+  Future<List<ProjectModel>> getProject() async {
     try {
       List<ProjectModel> list = [];
       // TODO: implement getSkill
@@ -60,7 +51,23 @@ class ApiServiceRepository extends RestAPIClient implements RepositoryAdapter {
     } catch (exception) {
       throw exception;
     }
+  }
 
-    throw UnimplementedError();
+  @override
+  Future<List<SocialModel>> getSocial() async {
+    try {
+      List<SocialModel> list = [];
+      // TODO: implement getSkill
+      // var url = Uri.https(CommonString.BASEURL, 'portfolio/list_skill.json');
+      List response = await get("list_social.json");
+      // response.forEach((element) => print("eeeeeeee $element"),);
+
+
+      list = response.map((json) => SocialModel.fromJson(json)).toList();
+
+      return list;
+    } catch (exception) {
+      throw exception;
+    }
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:portfolio_thanh_tung/constants/const_color.dart';
 import 'package:portfolio_thanh_tung/data/repository/api_service_repository.dart';
 import 'package:portfolio_thanh_tung/modules/dashboard/widgets/chart_widget.dart';
@@ -16,7 +17,6 @@ import 'bloc/dashboard_bloc.dart';
 import 'bloc/dashboard_event.dart';
 import 'bloc/dashboard_state.dart';
 import 'models/index.dart';
-import 'widgets/my_project_widget.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -83,8 +83,11 @@ class _DashboardPageState extends State<DashboardPage> {
                       height: height * .9,
                       child: BannerWidget(
                         title: FlutterI18n.translate(context, "dashboard.name"),
-                        description:
-                            "tôi la doan thanh tung, toi đến từ tuong laitôi la doan thanh tung, toi đến từ tuong laitôi la doan thanh tung, toi đến từ tuong laitôi la doan thanh tung, toi đến từ tuong lai",
+                        description: FlutterI18n.translate(
+                          context,
+                          "dashboard.description",
+                        ),
+                        listSocial: state.listSocial,
                       ),
                     ),
 
@@ -123,10 +126,11 @@ class _SkillWidget extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            "Skill",
-            style: TextStyle(
+            FlutterI18n.translate(context, "dashboard.skill"),
+            style: GoogleFonts.aDLaMDisplay(
               color: ConstColors.white,
               fontSize: ConstStyles.fontTitle(width),
+              fontWeight: FontWeight.bold,
             ),
           ),
           Wrap(
@@ -163,10 +167,11 @@ class _MyProject extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            "My Project",
-            style: TextStyle(
+            FlutterI18n.translate(context, "dashboard.project"),
+            style: GoogleFonts.aDLaMDisplay(
               color: ConstColors.white,
               fontSize: ConstStyles.fontTitle(width),
+              fontWeight: FontWeight.bold,
             ),
           ),
           ...List.generate(bloc.state.listProject.length, (index) {
@@ -302,7 +307,7 @@ class _ProjectWidgetState extends State<_ProjectWidget> {
                     children: [
                       Text(
                         widget.projectModel.name ?? "",
-                        style: TextStyle(
+                        style: GoogleFonts.aDLaMDisplay(
                           color: ConstColors.white,
                           fontSize: ConstStyles.fontTitle(width),
                         ),

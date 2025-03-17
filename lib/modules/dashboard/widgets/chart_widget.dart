@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:portfolio_thanh_tung/constants/const_images.dart';
 
 import '../../../constants/constants.dart';
@@ -277,7 +278,7 @@ class _ChartWidgetState extends State<ChartWidget>
         ),
         Text(
           widget.chartSkillModel.name.toString(),
-          style: TextStyle(
+          style: GoogleFonts.aDLaMDisplay(
             color: ConstColors.white,
             fontSize: ConstStyles.fontTitle(width),
           ),

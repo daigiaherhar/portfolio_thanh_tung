@@ -11,7 +11,7 @@ abstract class RestAPIClient {
   read(String file) async {
     try {
       var response = await client.read(
-        Uri.https(CommonString.BASEURL, 'portfolio/$file'),
+        Uri.https(CommonString.BASEURL, 'portfolio_data/$file'),
       );
       return response;
     } catch (exception) {
@@ -22,7 +22,7 @@ abstract class RestAPIClient {
   get(String file) async {
     try {
       var response = await client.get(
-        Uri.https(CommonString.BASEURL, 'portfolio/$file'),
+        Uri.https(CommonString.BASEURL, 'portfolio_data/$file'),
       );
       print("response.statusCode");
       print(response.body);

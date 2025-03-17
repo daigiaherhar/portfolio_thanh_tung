@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
               localizationsDelegates: [
                 FlutterI18nDelegate(
                   translationLoader: NetworkFileTranslationLoader(
-                    baseUri: Uri.https("daigiaherhar.github.io", "/portfolio/"),
+                    baseUri: Uri.https("daigiaherhar.github.io", "/portfolio_data/"),
                     // forcedLocale: Locale("en"),
 
                     // useCountryCode: true

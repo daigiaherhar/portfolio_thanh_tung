@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:portfolio_thanh_tung/global_blocs/language/language_cubit.dart';
+import 'package:portfolio_thanh_tung/modules/dashboard/models/index.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../constants/constants.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -19,6 +23,7 @@ class BannerWidget extends StatelessWidget {
     this.image2,
     this.image3,
     this.image4,
+    this.listSocial,
   });
 
   final String? title;
@@ -28,6 +33,7 @@ class BannerWidget extends StatelessWidget {
   final String? image3;
   final String? image4;
   late GlobalKey popupLang = GlobalKey();
+  final List<SocialModel>? listSocial;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +43,7 @@ class BannerWidget extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         Positioned.fill(child: AllImage()),
+
         Positioned.fill(child: Container(color: ConstColors.black_1)),
 
         Positioned(
@@ -48,10 +55,17 @@ class BannerWidget extends StatelessWidget {
             sDescription: description,
           ),
         ),
+
         Positioned(
           top: 0,
           right: 0,
           child: LanguageWidget(popupLang: popupLang),
+        ),
+
+        Positioned(
+          bottom: 0,
+          left: 0,
+          child: _SocialWidget(listSocial: listSocial),
         ),
       ],
     );
@@ -168,7 +182,7 @@ class TitleAndDescriptionWidget extends StatelessWidget {
             children: [
               Text(
                     sTitle ?? "",
-                    style: TextStyle(
+                    style: GoogleFonts.aDLaMDisplay(
                       color: ConstColors.white,
                       fontSize: ConstStyles.fontTitle(width),
                       height: 1,
@@ -258,6 +272,88 @@ class LanguageWidget extends StatelessWidget {
       enterHover: () => onTapLang(context),
       // exitHover: () => exitHover(context),
       lang: FlutterI18n.currentLocale(context)!.languageCode,
+    );
+  }
+}
+
+class _SocialWidget extends StatelessWidget {
+  _SocialWidget({super.key, this.listSocial});
+
+  List<SocialModel>? listSocial;
+
+  @override
+  Widget build(BuildContext context) {
+    print("listSocial");
+    print(listSocial);
+    return Padding(
+      padding: EdgeInsets.all(8),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(listSocial?.length ?? 0, (index) {
+                SocialModel data = listSocial![index];
+                return Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: InkWell(
+                    onTap: () => launchUrlString(data.link.toString()),
+                    child: Image.network(
+                      data.logo ?? "",
+                      height: 24,
+                      width: 24,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(
+                          Icons.error_outline_sharp,
+                          color: ConstColors.red,
+                        );
+                      },
+                    ),
+                  ),
+                );
+              }),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  FlutterI18n.translate(context, "mail"),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SelectableText(
+                  FlutterI18n.translate(context, "mail_value"),
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                FlutterI18n.translate(context, "phone"),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SelectableText(
+                FlutterI18n.translate(context, "phone_value"),
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

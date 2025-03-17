@@ -18,10 +18,12 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   void _init(InitDashBoardEvent event, Emitter<DashboardState> emit) async {
     List<ProjectModel> listProject = [];
     List<ChartSkillModel> listSkill = [];
+    List<SocialModel> listSocial = [];
     try {
 
 
       listSkill = await apiServiceRepository.getSkill();
+      listSocial = await apiServiceRepository.getSocial();
       listProject = await _readListProject();
 
       await Future.delayed(Duration(seconds: 1));
@@ -30,6 +32,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
         state.copyWith(
           status: DashboardStatus.loaded,
           listProject: listProject,
+          listSocial: listSocial,
           listSkill: listSkill,
         ),
       );
@@ -39,6 +42,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           status: DashboardStatus.error,
           listProject: listProject,
           listSkill: listSkill,
+          listSocial: listSocial,
           dashboardModel: DashboardModel(errorMessage: exception.toString()),
         ),
       );
