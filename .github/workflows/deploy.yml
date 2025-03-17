@@ -32,3 +32,8 @@ jobs:
         with:
           branch: portfolio-page
           folder: build/web
+
+      - name: Add redirect for Flutter Web
+        run: |
+          echo '<script>location.replace("/your-repository"+location.pathname+location.search)</script>' > build/web/404.html
+
