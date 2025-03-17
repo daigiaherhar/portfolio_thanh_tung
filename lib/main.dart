@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         child: BlocBuilder<LanguageCubit, LanguageState>(
           builder: (context, state) {
             return MaterialApp(
-              title: 'Flutter Demo',
+              title: 'Thanh Tung',
               debugShowCheckedModeBanner: false,
               locale: Locale(state.status.name),
               supportedLocales: [Locale("en"), Locale("vi")],
