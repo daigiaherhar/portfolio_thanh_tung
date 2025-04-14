@@ -5,12 +5,13 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:portfolio_thanh_tung/constants/const_color.dart';
-import 'package:portfolio_thanh_tung/data/repository/api_service_repository.dart';
+import 'package:portfolio_thanh_tung/data/repositories/api_repository_impl.dart';
 import 'package:portfolio_thanh_tung/modules/dashboard/widgets/chart_widget.dart';
 import 'package:portfolio_thanh_tung/modules/dashboard/widgets/index.dart';
 
 import '../../constants/const_images.dart';
 import '../../constants/constants.dart';
+import '../../data/repositories/api_repository.dart';
 import '../../global_widgets/sphere_animation.dart';
 import '../../utils/alert.dart';
 import 'bloc/dashboard_bloc.dart';
@@ -39,11 +40,29 @@ class _DashboardPageState extends State<DashboardPage> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return BlocProvider(
-      create:
-          (context) =>
-              DashboardBloc(ApiServiceRepository())..add(InitDashBoardEvent()),
+      create: (context) =>
+          DashboardBloc(ApiServiceRepositoryImpl())..add(InitDashBoardEvent()),
       child: _buildPage(context),
     );
+  }
+
+  _listener(BuildContext context, DashboardState state) {
+    switch (state.status) {
+      case DashboardStatus.init:
+        // TODO: Handle this case.
+        break;
+      case DashboardStatus.loaded:
+        // TODO: Handle this case.
+        break;
+      case DashboardStatus.error:
+        // TODO: Handle this case.
+        // print("DashboardStatus.error");
+        Alert.showLoading(
+          context,
+          message: state.dashboardModel?.errorMessage ?? "",
+        );
+        break;
+    }
   }
 
   Widget _buildPage(BuildContext context) {
@@ -54,53 +73,39 @@ class _DashboardPageState extends State<DashboardPage> {
     return Scaffold(
       backgroundColor: ConstColors.background,
       body: BlocConsumer<DashboardBloc, DashboardState>(
-        listener: (BuildContext context, state) {
-          switch (state.status) {
-            case DashboardStatus.init:
-              // TODO: Handle this case.
-              break;
-            case DashboardStatus.loaded:
-              // TODO: Handle this case.
-              break;
-            case DashboardStatus.error:
-              // TODO: Handle this case.
-              // print("DashboardStatus.error");
-              Alert.showLoading(
-                context,
-                message: state.dashboardModel?.errorMessage ?? "",
-              );
-              break;
-          }
-        },
+        listener: _listener,
         builder: (context, state) {
+          final bloc = BlocProvider.of<DashboardBloc>(context);
           return state.status == DashboardStatus.init
               ? SphereAnimation()
               : SingleChildScrollView(
-                controller: _scrollController,
-                child: Column(
-                  children: [
-                    Container(
-                      height: height * .9,
-                      child: BannerWidget(
-                        title: FlutterI18n.translate(context, "dashboard.name"),
-                        description: FlutterI18n.translate(
-                          context,
-                          "dashboard.description",
+                  controller: _scrollController,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: height * .9,
+                        child: BannerWidget(
+                          title:
+                              FlutterI18n.translate(context, "dashboard.name"),
+                          description: FlutterI18n.translate(
+                            context,
+                            "dashboard.description",
+                          ),
+                          listSocial: state.listSocial,
+                          onTapDownCV: () => bloc.add(DownCVEvent()),
                         ),
-                        listSocial: state.listSocial,
                       ),
-                    ),
 
-                    _SkillWidget(scrollController: _scrollController),
-                    _MyProject(scrollController: _scrollController),
-                    // Container(
-                    //   // height: height,
-                    //   width: width,
-                    //   child: MyProjectWidget(),
-                    // ),
-                  ],
-                ),
-              );
+                      _SkillWidget(scrollController: _scrollController),
+                      _MyProject(scrollController: _scrollController),
+                      // Container(
+                      //   // height: height,
+                      //   width: width,
+                      //   child: MyProjectWidget(),
+                      // ),
+                    ],
+                  ),
+                );
         },
       ),
     );
@@ -163,7 +168,6 @@ class _MyProject extends StatelessWidget {
     final bloc = BlocProvider.of<DashboardBloc>(context);
     return Container(
       padding: ConstStyles.paddingWeb(width),
-
       child: Column(
         children: [
           Text(
@@ -219,9 +223,8 @@ class _ProjectWidgetState extends State<_ProjectWidget> {
   }
 
   _scrollListener() {
-    RenderBox renderBox =
-        widget.projectModel.key.currentContext!.findRenderObject()!
-            as RenderBox;
+    RenderBox renderBox = widget.projectModel.key.currentContext!
+        .findRenderObject()! as RenderBox;
     final tapLocationOffset = renderBox.localToGlobal(Offset.zero);
     _handeAnimate(
       dWidget: tapLocationOffset.dy,
@@ -260,32 +263,31 @@ class _ProjectWidgetState extends State<_ProjectWidget> {
       padding: ConstStyles.paddingWebVertical(width),
       child: IntrinsicHeight(
         key: widget.projectModel.key,
-
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
-                  flex: 3,
-                  child: Container(
-                    alignment: Alignment.topCenter,
-                    // height: width * .01,
-                    // width: width * .01,
-                    // color: Colors.white,
-                    decoration: BoxDecoration(),
-                    child: Image.network(
-                      widget.projectModel.logo,
-                      fit: BoxFit.cover,
-                      height: width * .1,
-                      width: width * .1,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Text(
-                          'Error image',
-                          style: TextStyle(color: ConstColors.red),
-                        );
-                      },
-                    ),
-                  ),
-                )
+              flex: 3,
+              child: Container(
+                alignment: Alignment.topCenter,
+                // height: width * .01,
+                // width: width * .01,
+                // color: Colors.white,
+                decoration: BoxDecoration(),
+                child: Image.network(
+                  widget.projectModel.logo,
+                  fit: BoxFit.cover,
+                  height: width * .1,
+                  width: width * .1,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Text(
+                      'Error image',
+                      style: TextStyle(color: ConstColors.red),
+                    );
+                  },
+                ),
+              ),
+            )
                 .animate(target: isAnimate ? 1 : 0)
                 .moveX(begin: -width * .25, end: 0, duration: 1000.ms),
             Flexible(
@@ -293,7 +295,6 @@ class _ProjectWidgetState extends State<_ProjectWidget> {
                 margin: ConstStyles.paddingWebHorizontal(width),
                 decoration: BoxDecoration(
                   color: ConstColors.orange,
-
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
                 width: 10,
@@ -301,28 +302,28 @@ class _ProjectWidgetState extends State<_ProjectWidget> {
               ),
             ),
             Expanded(
-                  flex: 8,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.projectModel.name ?? "",
-                        style: GoogleFonts.aDLaMDisplay(
-                          color: ConstColors.white,
-                          fontSize: ConstStyles.fontTitle(width),
-                        ),
-                      ),
-                      HtmlWidget(
-                        widget.projectModel.html![FlutterI18n.currentLocale(
-                                  context,
-                                )?.languageCode ??
-                                "en"] ??
-                            "",
-                        // style: TextStyle(color: ConstColors.white),
-                      ),
-                    ],
+              flex: 8,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.projectModel.name ?? "",
+                    style: GoogleFonts.aDLaMDisplay(
+                      color: ConstColors.white,
+                      fontSize: ConstStyles.fontTitle(width),
+                    ),
                   ),
-                )
+                  HtmlWidget(
+                    widget.projectModel.html![FlutterI18n.currentLocale(
+                              context,
+                            )?.languageCode ??
+                            "en"] ??
+                        "",
+                    // style: TextStyle(color: ConstColors.white),
+                  ),
+                ],
+              ),
+            )
                 .animate(target: isAnimate ? 1 : 0)
                 .moveX(begin: width * .25, end: 0, duration: 1000.ms),
           ],

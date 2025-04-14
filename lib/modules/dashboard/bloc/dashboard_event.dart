@@ -7,3 +7,7 @@ class ChangeTabBarEvent extends DashboardEvent {
 
   ChangeTabBarEvent({required this.position});
 }
+
+class DownCVEvent extends DashboardEvent {
+  DownCVEvent();
+}

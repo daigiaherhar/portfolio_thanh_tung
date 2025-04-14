@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:portfolio_thanh_tung/modules/dashboard/models/dashboard_model.dart';
 import 'package:portfolio_thanh_tung/modules/dashboard/models/index.dart';
 
-import '../../../data/repository/api_service_repository.dart';
+import '../../../data/repositories/api_repository.dart';
 import 'dashboard_event.dart';
 import 'dashboard_state.dart';
 
@@ -11,6 +11,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   DashboardBloc(this.apiServiceRepository) : super(DashboardState().init()) {
     on<InitDashBoardEvent>(_init);
     on<ChangeTabBarEvent>(_changeTabBar);
+    on<DownCVEvent>(_downCVEvent);
   }
 
   final ApiServiceRepository apiServiceRepository;
@@ -20,8 +21,6 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     List<ChartSkillModel> listSkill = [];
     List<SocialModel> listSocial = [];
     try {
-
-
       listSkill = await apiServiceRepository.getSkill();
       listSocial = await apiServiceRepository.getSocial();
       listProject = await _readListProject();
@@ -64,5 +63,12 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     Emitter<DashboardState> emit,
   ) async {
     // emit(state.copyWith(indexTab: event.position));
+  }
+
+  void _downCVEvent(
+    DownCVEvent event,
+    Emitter<DashboardState> emit,
+  ) async {
+    await apiServiceRepository.downFileUri(Uri.parse("uri"));
   }
 }

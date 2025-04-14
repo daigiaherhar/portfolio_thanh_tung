@@ -3,12 +3,13 @@ import 'package:portfolio_thanh_tung/modules/dashboard/models/project_model.dart
 import 'package:portfolio_thanh_tung/modules/dashboard/models/social_model.dart';
 
 import '../../constants/constants.dart';
-import '../adapter/repository_adapter.dart';
 import 'package:http/http.dart' as http;
 
-import '../provider/rest.dart';
+import '../services/service_data.dart';
+import 'api_repository.dart';
 
-class ApiServiceRepository extends RestAPIClient implements RepositoryAdapter {
+class ApiServiceRepositoryImpl extends ServiceData
+    implements ApiServiceRepository {
   // var client = http.Client();
 
   @override
@@ -49,7 +50,7 @@ class ApiServiceRepository extends RestAPIClient implements RepositoryAdapter {
 
       return list;
     } catch (exception) {
-      throw exception;
+      rethrow;
     }
   }
 
@@ -62,12 +63,22 @@ class ApiServiceRepository extends RestAPIClient implements RepositoryAdapter {
       List response = await get("list_social.json");
       // response.forEach((element) => print("eeeeeeee $element"),);
 
-
       list = response.map((json) => SocialModel.fromJson(json)).toList();
 
       return list;
     } catch (exception) {
-      throw exception;
+      rethrow;
+    }
+  }
+
+  @override
+  Future downFileUri(Uri uri) async{
+    try {
+      final response = await downFile();
+      print("responseresponseresponse");
+      print(response);
+    } catch (exception) {
+      rethrow;
     }
   }
 }
