@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_i18n/flutter_i18n.dart';
@@ -14,6 +17,7 @@ import '../../../constants/constants.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../global_blocs/language/language_state.dart';
+import '../../../global_widgets/container_smoke_widget.dart';
 import '../../../global_widgets/global_widgets.dart';
 import 'index.dart';
 
@@ -46,48 +50,10 @@ class BannerWidget extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
 
     return ResponsiveWidget(
-        mobile: SafeArea(
-          child: Stack(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                      child: Container(
-                    height: double.infinity,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage(ConstImages.tung_2),
-                            fit: BoxFit.cover,
-                            opacity: 0.7)),
-                    child: TitleAndDescriptionWidget(
-                      sTitle: title,
-                      sDescription: description,
-                      sizeTile: 16,
-                      sizeDesc: 14,
-                    ),
-                  )),
-                  // Center(
-                  //   child: Container(
-                  //     color: Colors.red,
-                  //     height: double.infinity,
-                  //     width: 50,
-                  //     child: Text("55"),
-                  //   ),
-                  // ),
-                ],
-              ),
-              Positioned(
-                right: 0,
-                top: 50,
-                child: Container(
-                  color: Colors.red,
-                  child: Text("<<<<<<<<<<55>>>>>>>>>>"),
-                ),
-              ),
-            ],
-          ),
+        mobile: BannerWidgetMobile(
+          title: title,
+          description: description,
+          onTapDownCV: onTapDownCV,
         ),
         web: BannerWebWidget(
           title: FlutterI18n.translate(context, "dashboard.name"),
@@ -98,5 +64,214 @@ class BannerWidget extends StatelessWidget {
           listSocial: listSocial,
           onTapDownCV: onTapDownCV,
         ));
+  }
+}
+
+class BannerWidgetMobile extends StatelessWidget {
+  BannerWidgetMobile(
+      {super.key, this.title, this.description, this.onTapDownCV});
+
+  final String? title;
+  final String? description;
+  final ValueNotifier<bool> showDrawer = ValueNotifier(false);
+  final ScrollController _scrollTabController = ScrollController();
+  double widthTab = 0.0;
+  final onTapDownCV;
+
+  onDrawer() async {
+    showDrawer.value = !showDrawer.value;
+    return await _scrollTabController
+        .animateTo(
+          showDrawer.value ? widthTab : 0,
+          duration: Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        )
+        .whenComplete(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    widthTab = width * .4;
+
+    return SafeArea(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        controller: _scrollTabController,
+        physics: NeverScrollableScrollPhysics(),
+        child: ValueListenableBuilder<bool>(
+            valueListenable: showDrawer,
+            builder: (context, isDrawer, _) {
+              return Row(
+                children: [
+                  SizedBox(
+                    width: width,
+                    height: height,
+                    child: Stack(
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: AnimatedContainer(
+                                duration: Duration(milliseconds: 300),
+                                transform: Matrix4.skewX(isDrawer ? -.1 : 0),
+                                height: double.infinity,
+                                decoration: BoxDecoration(
+                                    color: ConstColors.black_1,
+                                    image: DecorationImage(
+                                        image: AssetImage(ConstImages.tung_2),
+                                        fit: BoxFit.cover,
+                                        opacity: 0.7)),
+                                child: Stack(
+                                  children: [
+                                    TitleAndDescriptionWidget(
+                                      sTitle: title,
+                                      sDescription: description,
+                                      sizeTile: 16,
+                                      sizeDesc: 14,
+                                    ),
+                                    if (isDrawer)
+                                      Positioned(
+                                          bottom: 0,
+                                          right: 0,
+                                          child: Text(
+                                            "23423",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )),
+                                  ],
+                                ),
+                              ).animate().moveX(begin: 20),
+                            ),
+                          ],
+                        ),
+                        Positioned(
+                          right: 0,
+                          top: 50,
+                          child: InkWell(
+                            onTap: () => onDrawer(),
+                            child: Container(
+                              padding: ConstStyles.padding_5,
+                              decoration: BoxDecoration(
+                                  color: ConstColors.orange,
+                                  borderRadius: BorderRadius.horizontal(
+                                      left: Radius.circular(20))),
+                              child: Icon(Icons.arrow_back_ios_new),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (isDrawer)
+                    TabBarWidget(
+                      width: widthTab,
+                      onDrawer: onDrawer,
+                      onTapDownCV: onTapDownCV,
+                    )
+                ],
+              );
+            }),
+      ),
+    );
+  }
+}
+
+class TabBarWidget extends StatelessWidget {
+  const TabBarWidget(
+      {super.key, required this.width, this.onDrawer, this.onTapDownCV});
+
+  final double width;
+  final onDrawer;
+  final onTapDownCV;
+
+  @override
+  Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    return Stack(
+      children: [
+        Transform(
+          transform: Matrix4.skewX(-0.1),
+          child: RainCustom(
+            width: width + (200),
+            height: height,
+          ), // this wraps the previous Animate in another Animate
+        ),
+        Container(
+          width: width,
+          height: double.infinity,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))),
+          child: GestureDetector(
+            onTap: () => onDrawer(),
+            child: Stack(
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      color: ConstColors.orange,
+                      height: 100,
+                      width: width,
+                    ),
+                    ContainerSmokeWidget(
+                      onTap: () => onTapDownCV(),
+                    ),
+                  ],
+                ),
+                Positioned(
+                    bottom: 0,
+                    left: 0,
+                    child: Text(
+                      "23423",
+                      style: TextStyle(color: Colors.white),
+                    )),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class RainCustom extends StatelessWidget {
+  RainCustom({super.key, required this.width, required this.height});
+
+  final double width;
+  final double height;
+  final random = Random();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width,
+      height: height,
+      color: Colors.transparent,
+      child: Stack(
+        children: List.generate(20, (index) {
+          final startX = random.nextDouble() * width;
+          final duration = Duration(milliseconds: 500 + random.nextInt(800));
+
+          return Positioned(
+            top: -10,
+            left: startX,
+            child: Container(
+              width: 2,
+              height: 50 + random.nextDouble() * 10,
+              color: ConstColors.yellow,
+            )
+                .animate(
+                  onPlay: (controller) => controller.repeat(),
+                )
+                .moveY(begin: -10, end: height * 5, duration: duration)
+                .fadeIn(duration: 100.ms)
+                .fadeOut(duration: 200.ms),
+          );
+        }),
+      ),
+    );
   }
 }

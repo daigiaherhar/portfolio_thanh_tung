@@ -12,6 +12,7 @@ import '../../../constants/constants.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 import '../../../global_blocs/language/language_state.dart';
+import '../../../global_widgets/container_smoke_widget.dart';
 import '../../../global_widgets/global_widgets.dart';
 import 'index.dart';
 
@@ -37,6 +38,7 @@ class BannerWebWidget extends StatelessWidget {
   late GlobalKey popupLang = GlobalKey();
   final List<SocialModel>? listSocial;
   final onTapDownCV;
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -67,21 +69,9 @@ class BannerWebWidget extends StatelessWidget {
         ),
         Positioned(
             bottom: 0,
-            right: 0,
-            child: InkWell(
-              onTap: onTapDownCV,
-              child: Container(
-                color: Colors.blue,
-                margin: EdgeInsets.all(8),
-                padding: EdgeInsets.all(15),
-                child: Row(
-                  children: [
-                    Text("My CV: sdfffffffffffsdfsdf"),
-                    Text("See"),
-                    Text("Download"),
-                  ],
-                ),
-              ),
+            right: 50,
+            child: ContainerSmokeWidget(
+              onTap: () => onTapDownCV(),
             ))
       ],
     );
@@ -177,7 +167,6 @@ class AllImage extends StatelessWidget {
   }
 }
 
-
 class LanguageWidget extends StatelessWidget {
   const LanguageWidget({super.key, required this.popupLang});
 
@@ -200,7 +189,7 @@ class LanguageWidget extends StatelessWidget {
   onTapLang(context) {
     print("onTapLangonTapLangonTapLang");
     RenderBox renderBox =
-    popupLang.currentContext!.findRenderObject()! as RenderBox;
+        popupLang.currentContext!.findRenderObject()! as RenderBox;
     final tapLocationOffset = renderBox.localToGlobal(Offset.zero);
     final Size buttonSize = renderBox.size;
     Navigator.of(context).push(

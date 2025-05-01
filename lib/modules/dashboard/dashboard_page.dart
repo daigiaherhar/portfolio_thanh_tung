@@ -79,33 +79,33 @@ class _DashboardPageState extends State<DashboardPage> {
           return state.status == DashboardStatus.init
               ? SphereAnimation()
               : SingleChildScrollView(
-                  controller: _scrollController,
-                  child: Column(
-                    children: [
-                      Container(
-                        height: height * .9,
-                        child: BannerWidget(
-                          title:
-                              FlutterI18n.translate(context, "dashboard.name"),
-                          description: FlutterI18n.translate(
-                            context,
-                            "dashboard.description",
-                          ),
-                          listSocial: state.listSocial,
-                          onTapDownCV: () => bloc.add(DownCVEvent()),
+                controller: _scrollController,
+                child: Column(
+                  children: [
+                    Container(
+                      height: height * .9,
+                      child: BannerWidget(
+                        title: FlutterI18n.translate(
+                            context, "dashboard.name"),
+                        description: FlutterI18n.translate(
+                          context,
+                          "dashboard.description",
                         ),
+                        listSocial: state.listSocial,
+                        onTapDownCV: () => bloc.add(DownCVEvent()),
                       ),
+                    ),
 
-                      _SkillWidget(scrollController: _scrollController),
-                      _MyProject(scrollController: _scrollController),
-                      // Container(
-                      //   // height: height,
-                      //   width: width,
-                      //   child: MyProjectWidget(),
-                      // ),
-                    ],
-                  ),
-                );
+                    _SkillWidget(scrollController: _scrollController),
+                    _MyProject(scrollController: _scrollController),
+                    // Container(
+                    //   // height: height,
+                    //   width: width,
+                    //   child: MyProjectWidget(),
+                    // ),
+                  ],
+                ),
+              );
         },
       ),
     );

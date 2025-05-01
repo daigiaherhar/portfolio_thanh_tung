@@ -5,6 +5,7 @@ class ConstStyles {
 
   static const padding_10 = EdgeInsets.all(10);
   static const padding_25 = EdgeInsets.all(25);
+  static const padding_vertical_25 = EdgeInsets.symmetric(vertical: 25);
   static const padding_5 = EdgeInsets.all(5);
   static const space_15 = SizedBox(height: 15);
   static const space_25 = SizedBox(height: 25);

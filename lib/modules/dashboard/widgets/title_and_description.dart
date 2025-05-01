@@ -29,6 +29,7 @@ class TitleAndDescriptionWidget extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             sTitle ?? "",

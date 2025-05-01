@@ -16,4 +16,6 @@ class ConstColors {
   static Color black_5 = Colors.white.withValues(alpha: 0.6);
   static const Color white = Colors.white;
   static const Color red = Colors.red;
+  static const Color yellow = Colors.yellow;
+  static const Color purple = Colors.purple;
 }
