@@ -156,10 +156,16 @@ class BannerWidgetMobile extends StatelessWidget {
                             child: Container(
                               padding: ConstStyles.padding_5,
                               decoration: BoxDecoration(
-                                  color: ConstColors.orange,
+                                  color: ConstColors.transparent,
+                                  image: DecorationImage(
+                                    image: AssetImage(ConstImages.lightning),
+                                  ),
                                   borderRadius: BorderRadius.horizontal(
                                       left: Radius.circular(20))),
-                              child: Icon(Icons.arrow_back_ios_new),
+                              child: Icon(
+                                Icons.arrow_back_ios_new,
+                                color: ConstColors.white,
+                              ),
                             ),
                           ),
                         ),
@@ -211,11 +217,7 @@ class TabBarWidget extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    Container(
-                      color: ConstColors.orange,
-                      height: 100,
-                      width: width,
-                    ),
+                    _MoonCloudWidget(),
                     ContainerSmokeWidget(
                       onTap: () => onTapDownCV(),
                     ),
@@ -271,6 +273,50 @@ class RainCustom extends StatelessWidget {
                 .fadeOut(duration: 200.ms),
           );
         }),
+      ),
+    );
+  }
+}
+
+class _MoonCloudWidget extends StatelessWidget {
+  const _MoonCloudWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height * 0.3;
+    final width = MediaQuery.of(context).size.width * 0.4;
+    return Container(
+      height: height,
+      width: width,
+      child: Stack(
+        children: [
+          _cloud(height, left: -40, top: height * .2),
+          _cloud(height, right: -40, top: height * .07),
+          SizedBox(
+            height: height * .7,
+            child: Image.asset(
+              ConstImages.moon,
+            ),
+          ),
+          _cloud(height, right: -40, top: height * .2),
+          Image.asset(
+            ConstImages.cloud_2,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _cloud(double height, {double? top, double? left, double? right}) {
+    return Positioned(
+      top: top,
+      left: left,
+      right: right,
+      child: SizedBox(
+        height: height * 0.3,
+        child: Image.asset(
+          ConstImages.cloud,
+        ),
       ),
     );
   }
