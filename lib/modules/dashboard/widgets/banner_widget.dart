@@ -248,32 +248,42 @@ class RainCustom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      color: Colors.transparent,
-      child: Stack(
-        children: List.generate(20, (index) {
-          final startX = random.nextDouble() * width;
-          final duration = Duration(milliseconds: 500 + random.nextInt(800));
+    return FutureBuilder(
+      future: Future.delayed(Duration(seconds: 1)),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          return  Container(
+            width: width,
+            height: height,
+            color: Colors.transparent,
+            child: Stack(
+              children: List.generate(20, (index) {
+                final startX = random.nextDouble() * width;
+                final duration = Duration(milliseconds: 500 + random.nextInt(800));
 
-          return Positioned(
-            top: -10,
-            left: startX,
-            child: Container(
-              width: 2,
-              height: 50 + random.nextDouble() * 10,
-              color: ConstColors.yellow,
-            )
-                .animate(
-                  onPlay: (controller) => controller.repeat(),
-                )
-                .moveY(begin: -10, end: height * 5, duration: duration)
-                .fadeIn(duration: 100.ms)
-                .fadeOut(duration: 200.ms),
-          );
-        }),
-      ),
+                return Positioned(
+                  top: -10,
+                  left: startX,
+                  child: Container(
+                    width: 2,
+                    height: 50 + random.nextDouble() * 10,
+                    color: ConstColors.yellow,
+                  )
+                      .animate(
+                    onPlay: (controller) => controller.repeat(),
+                  )
+                      .moveY(begin: -10, end: height * 5, duration: duration)
+                      .fadeIn(duration: 100.ms)
+                      .fadeOut(duration: 200.ms),
+                );
+              }),
+            ),
+          ); // Hiện widget sau 1 giây
+        } else {
+          return SizedBox(); // Trống trong lúc chờ
+        }
+
+      },
     );
   }
 }
